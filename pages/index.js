@@ -13,10 +13,19 @@ app.service('v1/cards').create({
   text: 'Next connection'
 });
 
-export default function Index() {
-  return (
-    <div>
-      <p>Lean Kanban</p>
-    </div>
-  )
-}
+const Index = props => (
+  <ul>
+    {props.cards.map(card => (
+      <li key={card._id}>{card.text}</li>
+    ))}
+  </ul>
+);
+
+Index.getInitialProps = async function() {
+  const cards = await app.service('v1/cards').find({query:{}});
+  return {
+    cards: cards.data
+  };
+};
+
+export default Index
