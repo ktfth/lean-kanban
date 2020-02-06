@@ -1,3 +1,4 @@
+import Layout from '../components/MyLayout';
 import io from 'socket.io-client';
 import feathers from '@feathersjs/client';
 
@@ -10,15 +11,33 @@ app.configure(feathers.socketio(socket));
 app.configure(feathers.authentication());
 
 app.service('v1/cards').create({
-  text: 'Next connection'
+  text: 'Next connection',
+  createdAt: new Date(),   
 });
 
 const Index = props => (
-  <ul>
-    {props.cards.map(card => (
-      <li key={card._id}>{card.text}</li>
-    ))}
-  </ul>
+  <Layout>
+    <form>
+      <label>
+        Text: <input type="text" name="text" />
+      </label>
+    </form>
+    <ul>
+      {props.cards.map(card => (
+        <li key={card._id}>{card.text}</li>
+      ))}
+    </ul>
+    <style jsx>{`
+      ul {
+        padding: 0;
+      }
+
+      li {
+        list-style: none;
+        margin: 5px 0;
+      }
+    `}</style>
+  </Layout>
 );
 
 Index.getInitialProps = async function() {
